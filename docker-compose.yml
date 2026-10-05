@@ -1,1 +1,25 @@
-#TODO: Complete the docker compose file
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - vw-data:/data
+    environment:
+      ADMIN_TOKEN_FILE: /run/secrets/admin_token
+      LOG_LEVEL: info
+      TZ: UTC
+    secrets:
+      - admin_token
+    mem_limit: 512m
+    cpus: 1.0
+
+volumes:
+  vw-data:
+    name: vw-data
+
+secrets:
+  admin_token:
+    file: ./secrets/admin_token
